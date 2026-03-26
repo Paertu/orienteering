@@ -1,11 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import React, { useRef } from 'react';
 
 export default function App() {
+  const mapRef = useRef(null);
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <MapView
+        provider={PROVIDER_GOOGLE}
+        style={styles.map}
+        mapType='satellite'
+        initialCamera={{
+          center: {
+            latitude:59.22693030653677,
+            longitude:24.138830513826036,
+          },
+          pitch: 0,
+          heading: 0,
+          altitude: 1,
+          zoom: 16
+        }}
+      />
     </View>
   );
 }
@@ -13,8 +29,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
+  map: {
+    ...StyleSheet.absoluteFill,
+  }
 });
