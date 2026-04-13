@@ -1,10 +1,14 @@
 import React, {useState} from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
 
 export default function SignupView() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const auth = getAuth();
 
     const validateSignup = () => {
         if (!username || !email || !password) {
@@ -23,10 +27,26 @@ export default function SignupView() {
         return true;      
     }
 
-    const handleSignup = () => {
+    const handleSignup = async () => {
       if (!validateSignup()) {
         return;
       }
+      
+      try {
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        const user = userCredential.user;
+
+        console.log("User created", user.email);
+      } 
+      catch (error) {
+        console.log(error.message);
+      }
+      
       Alert.alert('Success', `Logged in as ${username}`, [
             {
                 text: 'Continue'
