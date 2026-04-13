@@ -9,23 +9,31 @@ export default function SignupView() {
     const validateSignup = () => {
         if (!username || !email || !password) {
             Alert.alert('Signup Error', 'Required fields are not filled in!');
-            return;
+            return false;
         }
 
         const validateEmail = () => {
             const pattern = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-            if (!pattern.test(email)) {
-                Alert.alert('Email error', 'Inserted Email address is not a valid format!');
-                return;
-            }
+            return pattern.test(email);
         }
+        if (!validateEmail()) {
+          Alert.alert('Signup Error', 'Email is invalid!');
+          return false;
+        }  
+        return true;      
+    }
 
-        Alert.alert('Success', `Logged in, ${username}`, [
+    const handleSignup = () => {
+      if (!validateSignup()) {
+        return;
+      }
+      Alert.alert('Success', `Logged in as ${username}`, [
             {
                 text: 'Continue'
             }
         ]);
     }
+
     return (
     <View>
       <Text>Sign Up</Text>
@@ -49,7 +57,8 @@ export default function SignupView() {
         secureTextEntry={true}
       />
 
-      <Button title="Sign Up" onPress={validateSignup} />
+      <Button title="Sign Up" onPress={handleSignup} />
+      <Text>Have an Account?</Text>
     </View>
   );
 
