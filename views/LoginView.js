@@ -43,7 +43,7 @@ export default function loginView() {
                 value={password}
                 onChangeText={setPassword}
             />
-          <Button title="Log in" onPress={validateLogin} />
+          <Button title="Log in" onPress={handleLogin} />
           <Text>Create Account?</Text>
         </View>
     )
