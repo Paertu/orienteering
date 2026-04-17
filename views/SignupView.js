@@ -1,14 +1,15 @@
 import React, {useState} from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { getAuth } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { auth } from '../services/firebase';
+import { useNavigation } from '@react-navigation/native';
 
 export default function SignupView() {
+  const navigation = useNavigation();
+
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    const auth = getAuth();
 
     const validateSignup = () => {
         if (!username || !email || !password) {
@@ -41,6 +42,10 @@ export default function SignupView() {
 
         const user = userCredential.user;
 
+        await updateProfile(user, {
+          displayName: username
+        });
+
         console.log("User created", user.email);
       } 
       catch (error) {
@@ -49,7 +54,8 @@ export default function SignupView() {
       
       Alert.alert('Success', `Logged in as ${username}`, [
             {
-                text: 'Continue'
+                text: 'Continue',
+                onPress: () => navigation.navigate('Login')
             }
         ]);
     }
@@ -78,8 +84,9 @@ export default function SignupView() {
       />
 
       <Button title="Sign Up" onPress={handleSignup} />
-      <Text>Have an Account?</Text>
+      <View style={{marginTop:25}}>
+        <Text onPress={() => navigation.navigate('Login')}>Have an Account?</Text>
+      </View>
     </View>
   );
-
 }

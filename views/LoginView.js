@@ -1,7 +1,12 @@
+import { useNavigation } from '@react-navigation/native';
 import React, {useState} from 'react';
 import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../services/firebase';
 
-export default function loginView() {
+export default function LoginView() {
+    const navigation = useNavigation();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -18,15 +23,31 @@ export default function loginView() {
         return true;
     }
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (!validateLogin()) {
             return;
         }
-        Alert.alert('Login Success', `Logged in with ${$email}`, [
-            {
-                text: 'Continue'
-            }
-        ]);
+        try {
+            const userCredential = await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            )
+
+            const user = userCredential.user;
+
+            console.log("User logged in", user.displayName);
+
+            Alert.alert('Login Success', `Logged in with ${user.email}`, [
+                {
+                    text: 'Continue'
+                }
+            ]);
+        }
+        catch (error){
+            console.log(error.message);
+        }
+
     }
     return (
         <View>
@@ -44,7 +65,7 @@ export default function loginView() {
                 onChangeText={setPassword}
             />
           <Button title="Log in" onPress={handleLogin} />
-          <Text>Create Account?</Text>
+          <Text onPress={() => navigation.navigate('Signup')}>Create Account?</Text>
         </View>
     )
 }
