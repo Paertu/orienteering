@@ -40,7 +40,8 @@ export default function LoginView() {
 
             Alert.alert('Login Success', `Logged in with ${user.email}`, [
                 {
-                    text: 'Continue'
+                    text: 'Continue',
+                    onPress: () => navigation.navigate('Profile')
                 }
             ]);
         }
@@ -63,6 +64,7 @@ export default function LoginView() {
                 placeholder='Password'
                 value={password}
                 onChangeText={setPassword}
+                secureTextEntry={true}
             />
           <Button title="Log in" onPress={handleLogin} />
           <Text onPress={() => navigation.navigate('Signup')}>Create Account?</Text>

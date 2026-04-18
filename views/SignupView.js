@@ -1,20 +1,32 @@
 import React, {useState} from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth } from '../services/firebase';
+import { auth, db } from '../services/firebase';
 import { useNavigation } from '@react-navigation/native';
+import { Dropdown } from 'react-native-element-dropdown';
+import { doc, setDoc } from 'firebase/firestore';
 
 export default function SignupView() {
   const navigation = useNavigation();
 
+    const roleOptions = [
+      { role: 'Student', value: 'student' },
+      { role: 'Teacher', value: 'teacher' }
+    ];
+
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [role, setRole] = useState('');
 
     const validateSignup = () => {
         if (!username || !email || !password) {
             Alert.alert('Signup Error', 'Required fields are not filled in!');
             return false;
+        }
+        if (!role) {
+          Alert.alert('Signup Error', 'Please select a role');
+          return false;
         }
 
         const validateEmail = () => {
@@ -46,6 +58,10 @@ export default function SignupView() {
           displayName: username
         });
 
+        await setDoc(doc(db, "users", user.uid), {
+          role: role
+        });
+
         console.log("User created", user.email);
       } 
       catch (error) {
@@ -62,8 +78,6 @@ export default function SignupView() {
 
     return (
     <View>
-      <Text>Sign Up</Text>
-
       <TextInput
         placeholder="Username"
         value={username}
@@ -81,6 +95,15 @@ export default function SignupView() {
         value={password}
         onChangeText={setPassword}
         secureTextEntry={true}
+      />
+
+      <Dropdown
+        data={roleOptions}
+        labelField="role"
+        valueField="value"
+        placeholder='Select role'
+        value={role}
+        onChange={item => setRole(item.value)}
       />
 
       <Button title="Sign Up" onPress={handleSignup} />

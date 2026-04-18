@@ -6,6 +6,7 @@ import Map from './src/components/Map';
 import SignupView from './views/SignupView';
 import LoginView from './views/LoginView';
 import HomeView from './views/HomeView';
+import ProfileView from './views/ProfileView';
 
 const RootStack = createNativeStackNavigator({
       screens: {
@@ -18,6 +19,9 @@ const RootStack = createNativeStackNavigator({
           },
           Login: {
             screen: LoginView
+          },
+          Profile: {
+            screen: ProfileView
           }
       }
   });
