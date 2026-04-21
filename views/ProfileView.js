@@ -53,6 +53,7 @@ export default function ProfileView () {
 
     const handleLogout = async () => {
         try {
+            navigation.navigate('Login');
             await signOut(auth);
             console.log("logged out");
         } catch (err) {
