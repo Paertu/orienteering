@@ -13,6 +13,7 @@ import MainTabs from './src/components/BottomBar';
 import JoinGroupView from './views/JoinGroupView';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
+import GroupView from './views/GroupView';
 
 const RootStack = createNativeStackNavigator({
     initialRouteName: 'Main',
@@ -24,6 +25,9 @@ const RootStack = createNativeStackNavigator({
             headerShown: false
           },
       },
+        Group: {
+          screen: GroupView
+        },
         Home: {
           screen: HomeView
         },

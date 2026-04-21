@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { doc, getDoc, collection, query, where, getDocs, onSnapshot } from 'firebase/firestore';
 import { signOut } from 'firebase/auth';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
+import GroupView from './GroupView';
 
 export default function ProfileView () {
     const [role, setRole] = useState('Waiting');
@@ -13,6 +15,8 @@ export default function ProfileView () {
 
     const photoURL = user.photoURL;
     const emailVerified = user.emailVerified;
+
+    const navigation = useNavigation();
 
     useEffect(() => {
         const fetchUserData = () => {
@@ -76,6 +80,7 @@ export default function ProfileView () {
             <Text>Groups:</Text>
             {groups.map(item => (
                 <View key={item.id} style={{ marginVertical: 5 }}>
+                    <Text onPress={() => navigation.navigate('Group', { groupData: item})}>{item.name} | DEBUG CODE REMOVE LATER: {item.inviteCode}</Text>
                 </View>
             ))}
 
