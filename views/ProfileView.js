@@ -43,6 +43,12 @@ export default function ProfileView () {
                         });
                     }) ;
                     setGroups(cleanList);
+                }, (err) => {
+                    if (err.code === 'permission-denied') {
+                        console.log("unsubscribed from listener due to logout");
+                    } else {
+                        console.log("Error:", err);
+                    }
                 });
                 return unsubscribe;
             }
