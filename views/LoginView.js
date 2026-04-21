@@ -41,7 +41,7 @@ export default function LoginView() {
             Alert.alert('Login Success', `Logged in with ${user.email}`, [
                 {
                     text: 'Continue',
-                    onPress: () => navigation.navigate('Profile')
+                    onPress: () => navigation.navigate('Main')
                 }
             ]);
         }

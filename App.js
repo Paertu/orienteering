@@ -9,11 +9,15 @@ import HomeView from './views/HomeView';
 import ProfileView from './views/ProfileView';
 import CreateGroupView from './views/CreateGroupView';
 import MainTabs from './src/components/BottomBar';
+import JoinGroupView from './views/JoinGroupView';
 
 const RootStack = createNativeStackNavigator({
     initialRouteName: 'Main',
 
     screens: {
+        Home: {
+          screen: HomeView
+        },
         Signup: {
           screen: SignupView
         },
@@ -22,6 +26,12 @@ const RootStack = createNativeStackNavigator({
         },
         Profile: {
           screen: ProfileView
+        },
+        JoinGroup: {
+          screen: JoinGroupView
+        },
+        CreateGroup: {
+          screen: CreateGroupView
         },
         Main: {
         screen: MainTabs,
