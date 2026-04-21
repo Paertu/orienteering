@@ -2,7 +2,8 @@ import { useNavigation } from '@react-navigation/native';
 import React, {useState} from 'react';
 import { View, Text, TextInput, Button, Alert } from 'react-native';
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from '../services/firebase';
+import { auth, db } from '../services/firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 export default function LoginView() {
     const navigation = useNavigation();
@@ -38,6 +39,8 @@ export default function LoginView() {
 
             console.log("User logged in", user.displayName);
 
+            await syncUserNameWithDb(user);
+
             Alert.alert('Login Success', `Logged in with ${user.email}`, [
                 {
                     text: 'Continue',
@@ -48,8 +51,17 @@ export default function LoginView() {
         catch (error){
             console.log(error.message);
         }
-
     }
+
+    const syncUserNameWithDb = async (user) => {
+        console.log("Attempting to sync user name with db");
+        await setDoc(doc(db, "users", user.uid), {
+            displayName: user.displayName,
+            email: user.email,
+        }, {merge:true});
+        console.log("Merged db for", user.displayName);
+    };
+
     return (
         <View>
             <Text>Login</Text>
