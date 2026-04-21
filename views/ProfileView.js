@@ -1,7 +1,7 @@
 import { Text, View, Button } from 'react-native';
 import { auth, db } from '../services/firebase';
 import { useEffect, useState } from 'react';
-import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, getDocs, onSnapshot } from 'firebase/firestore';
 import { signOut } from 'firebase/auth';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
 
@@ -15,7 +15,7 @@ export default function ProfileView () {
     const emailVerified = user.emailVerified;
 
     useEffect(() => {
-        const fetchUserData = async () => {
+        const fetchUserData = () => {
             const user = auth.currentUser;
             if (user) {
                 if (user.emailVerified == 'verified') {
@@ -29,21 +29,22 @@ export default function ProfileView () {
                     where("members", "array-contains", user.uid)
                 );
 
-                const snap = await getDocs(q);
-                let cleanList = [];
-                snap.forEach((doc) => {
-                    const docData = doc.data();
-
-                    const combinedDocData = {
-                        id: doc.id,
-                        ...data
-                    };
-                    cleanList.push(combinedDocData);
-                })
-                setGroups(cleanList)
+                const unsubscribe = onSnapshot(q, (snap) => {
+                    let cleanList = [];
+                    snap.forEach((doc) => {
+                        const docData = doc.data();
+                        cleanList.push({
+                            id: doc.id,
+                            ...docData
+                        });
+                    }) ;
+                    setGroups(cleanList);
+                });
+                return unsubscribe;
             }
         };
-        fetchUserData();
+        const stopListener = fetchUserData();
+        return () => { if (stopListener) stopListener(); };
     }, []);
 
     const handleLogout = async () => {
@@ -75,7 +76,6 @@ export default function ProfileView () {
             <Text>Groups:</Text>
             {groups.map(item => (
                 <View key={item.id} style={{ marginVertical: 5 }}>
-                    <Text>{item.name} | DEBUG CODE REMOVE LATER: {item.inviteCode}</Text>
                 </View>
             ))}
 
