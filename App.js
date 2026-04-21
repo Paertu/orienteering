@@ -7,24 +7,30 @@ import SignupView from './views/SignupView';
 import LoginView from './views/LoginView';
 import HomeView from './views/HomeView';
 import ProfileView from './views/ProfileView';
+import CreateGroupView from './views/CreateGroupView';
+import MainTabs from './src/components/BottomBar';
 
 const RootStack = createNativeStackNavigator({
-      screens: {
-          Home: {
-              screen: HomeView,
-              options: {title: 'Home'},
-          },
-          Signup: {
-            screen: SignupView
-          },
-          Login: {
-            screen: LoginView
-          },
-          Profile: {
-            screen: ProfileView
-          }
-      }
-  });
+    initialRouteName: 'Main',
+
+    screens: {
+        Signup: {
+          screen: SignupView
+        },
+        Login: {
+          screen: LoginView
+        },
+        Profile: {
+          screen: ProfileView
+        },
+        Main: {
+        screen: MainTabs,
+        options: {
+          headerShown: false
+        },
+      },
+    }
+});
 
 const NavigationStack = createStaticNavigation(RootStack);
 
