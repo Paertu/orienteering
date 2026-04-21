@@ -14,7 +14,7 @@ export default function CreateGroupView() {
             const teacherId = auth.currentUser.uid;
             const data = await CreateGroup(teacherId,groupName);
 
-            setResult({code:data.code, name:groupName})
+            setResult({code:data.inviteCode, name:groupName})
             setModalVisible(true);
             setGroupName('');
         } catch (err) {
