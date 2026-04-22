@@ -68,7 +68,7 @@ export default function SignupView() {
         console.log(error.message);
       }
       
-      Alert.alert('Success', `Logged in as ${username}`, [
+      Alert.alert('Success', `Account created for ${username}`, [
             {
                 text: 'Continue',
                 onPress: () => navigation.navigate('Login')

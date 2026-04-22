@@ -119,7 +119,6 @@ export default function GroupView({ route }) {
                 <Text>
                     {groupData.id}
                 </Text>
-
                     {memberNames.length > 0 && 
                         memberNames.map((name, index) => (
                             <Text key={index}>
@@ -129,7 +128,9 @@ export default function GroupView({ route }) {
                     }
             </View>
 
-            <View>
+
+            {role === 'teacher' && (
+            <View>             
                 <View style={{height:400}}>
                     <Map onLongPress={onLongPress}>
                         {assignments && assignments.map((item) => {
@@ -166,6 +167,7 @@ export default function GroupView({ route }) {
                     </View>
                 </Modal>
             </View>
+            )}
         </View>
     )
 }
