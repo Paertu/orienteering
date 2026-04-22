@@ -8,7 +8,7 @@ export function AssignmentItem({  title, location }) {
     );
 }
 
-export function AssignmentMarker({ assignment }) {
+export function AssignmentMarker( {assignment} ) {
     return (
         <Marker
             coordinate={assignment.coords}

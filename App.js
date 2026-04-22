@@ -14,6 +14,7 @@ import JoinGroupView from './views/JoinGroupView';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import GroupView from './views/GroupView';
+import StudentView from './views/StudentView';
 
 const RootStack = createNativeStackNavigator({
     initialRouteName: 'Main',
@@ -25,6 +26,9 @@ const RootStack = createNativeStackNavigator({
             headerShown: false
           },
       },
+        StudentView: {
+          screen: StudentView
+        },
         Group: {
           screen: GroupView
         },

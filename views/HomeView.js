@@ -6,6 +6,7 @@ import { auth, db} from '../services/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 
+
 export default function HomeView () {
     const navigation = useNavigation();
     const [role, setRole] = useState(null);

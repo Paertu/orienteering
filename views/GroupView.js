@@ -1,7 +1,9 @@
-import { Text, View, Button, Modal, Alert } from 'react-native';
-import React, { useState,useEffect } from 'react';
-import { collection, doc, getDoc, onSnapshot, addDoc, query, where, snapshot} from 'firebase/firestore';
-import { db } from '../services/firebase';
+import { Text, View, Button, Modal, Alert, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { collection, doc, getDoc, onSnapshot, addDoc, query, where} from 'firebase/firestore';
+import { db, auth } from '../services/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useNavigation } from '@react-navigation/native';
 
 import { AssignmentItem, AssignmentMarker } from '../src/components/Assignment';
 import Map from '../src/components/Map';
@@ -14,14 +16,39 @@ export default function GroupView({ route }) {
     const [tempCoords, setTempCoords] = useState(null);
     const [assignmentTitle, setAssignmentTitle] = useState('');
     const [assignments, setAssignments] = useState([]);
+    const [role, setRole] = useState(null);
+
+    const navigation = useNavigation();
+    
+    useEffect(() => {
+        const subscribeToUserRole = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    const userDoc = await getDoc(doc(db, "users", user.uid));
+                    if (userDoc.exists()) {
+                        setRole(userDoc.data().role);
+                    } else {
+                        console.log("No doc found in db");
+                    }
+                } catch (err) {
+                    console.log("Error w fetching roles:", err);
+                }
+            } else {
+                setRole(null);
+            }
+        });
+        return () => subscribeToUserRole();
+    }, []);
 
     useEffect(() => {
         const q = query(collection(db, "assignments"), where("groupId", "==", groupData.id));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            setAssignments(snapshot.docs.map(doc => ({
+        const unsubscribe = onSnapshot(q, (snap) => {
+            const fetchedData = (snap.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
             })));
+            setAssignments(fetchedData);
+            console.log("full db data:", JSON.stringify(fetchedData, null, 2));
         });
         return () => unsubscribe();
     }, [groupData.id]);
@@ -32,7 +59,7 @@ export default function GroupView({ route }) {
                 const userRef = doc(db, "users", uid);
                 const userSnap = await getDoc(userRef);
 
-                if (userSnap.exists) {
+                if (userSnap.exists()) {
                     return userSnap.data().displayName;
                 } 
                 else {
@@ -76,6 +103,15 @@ export default function GroupView({ route }) {
     return (
         <View>
             <View>
+                {role === 'student' && (
+                    <Button
+                        title='Open Map'
+                        onPress={() => navigation.navigate('StudentView', {groupData} )}
+                    />
+                )}
+                
+            </View>
+            <View>
                 <Text>
                     {groupData.name}
                 </Text>
@@ -96,10 +132,18 @@ export default function GroupView({ route }) {
             <View>
                 <View style={{height:400}}>
                     <Map onLongPress={onLongPress}>
-                        {assignments.map((item) => (
-                            <AssignmentMarker key={item.id} assignment={item}/>
-                        ))}
-                </Map>
+                        {assignments && assignments.map((item) => {
+                            if (!item.coords || typeof item.coords.latitude !== 'number') {
+                                return null;
+                            }
+                            return (
+                             <AssignmentMarker 
+                                key={item.id} 
+                                assignment={item}
+                            />   
+                        );     
+                    })}
+                    </Map>
                 </View>
                 
                 <Modal visible={modalVisible}>
