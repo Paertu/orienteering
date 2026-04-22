@@ -3,7 +3,7 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import React, { useRef, useState, useEffect } from 'react';
 import { useLocation } from '../hooks/useLocation';
 
-const Map = () => {
+const Map = ({ children, onLongPress }) => {
     const mapRef = useRef(null);
     const {location, errorMsg} = useLocation();
     const [isMapReady, setIsMapReady] = useState(false);
@@ -29,6 +29,7 @@ const Map = () => {
         <MapView
             ref={mapRef}
             onMapReady={() => setIsMapReady(true)}
+            onLongPress={onLongPress}
             showsUserLocation={true}
             followsUserLocation={true}
             provider={PROVIDER_GOOGLE}
@@ -44,7 +45,10 @@ const Map = () => {
             // altitude: 1,
             // zoom: 16
             // }}
-        />
+            
+        >
+            {children}
+        </MapView>
     );
 };
 
