@@ -5,7 +5,6 @@
 
 ### What functions can teachers expect to have? How much is going to be done by the end of the prototype's life cycle?
 >By the time the prototype is finished, the functions that teachers can expect are the following (in order of development priority):
-- [x] See the locations of their pupils
 - [x] Create assignments
 - [x] Create Classes
 - [x] Add grades (only in app for now, intended to work as more of a reminder than anything else)
