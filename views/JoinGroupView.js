@@ -21,7 +21,7 @@ export default function JoinGroupView() {
             Alert.alert("Success", `Joined group '${result.groupName}' `, [
                 {
                     text: 'Continue',
-                    onPress: () => navigation.navigate('Home')
+                    onPress: () => navigation.navigate('Profile')
                 }
             ]);
         } catch (err) {
@@ -36,7 +36,9 @@ export default function JoinGroupView() {
                 value={inviteCode}
                 onChangeText={setInviteCode}
             />
-            <Button title='Join Groip' onPress={handleJoin}/>
+            <Button title='Join Group' onPress={() => {
+                handleJoin();
+            }}/>
         </View>
     )
 }

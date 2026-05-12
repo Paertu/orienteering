@@ -141,6 +141,7 @@ export default function GroupView({ route }) {
                              <AssignmentMarker 
                                 key={item.id} 
                                 assignment={item}
+                                showTooltip={true}
                             />   
                         );     
                     })}

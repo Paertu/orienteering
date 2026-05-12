@@ -60,7 +60,7 @@ export default function StudentView({route}) {
                     }
                     return (
                         <React.Fragment key={item.id}>
-                            <AssignmentMarker assignment={item}/>
+                            <AssignmentMarker assignment={item} showTooltip = {false}/>
                             <Circle
                                 center={item.coords}
                                 radius={50}

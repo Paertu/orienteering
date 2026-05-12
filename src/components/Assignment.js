@@ -8,11 +8,12 @@ export function AssignmentItem({  title, location }) {
     );
 }
 
-export function AssignmentMarker( {assignment} ) {
+export function AssignmentMarker( {assignment, showTooltip = true} ) {
     return (
         <Marker
             coordinate={assignment.coords}
-            title={assignment.title}
+            title={showTooltip ? assignment.title : undefined}
+            tappable={showTooltip}
         />
     )
 }
